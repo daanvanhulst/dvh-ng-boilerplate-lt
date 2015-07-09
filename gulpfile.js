@@ -9,6 +9,8 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     tsc = require('gulp-typescript'),
 	sourcemaps = require('gulp-sourcemaps'),
+	ngHtml2Js = require("gulp-ng-html2js"),
+	minifyHtml = require("gulp-minify-html"),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
 	ngAnnotate = require('gulp-ng-annotate'),
@@ -16,6 +18,7 @@ var gulp = require('gulp'),
     notify = require('gulp-notify'),
     tslint = require('gulp-tslint'),
     livereload = require('gulp-livereload'),
+	gutil = require('gulp-util'),
     del = require('del'),
 	Config = require('./gulpfile.config');;
 
@@ -60,24 +63,51 @@ gulp.task('compile-ts', function () {
                            noExternalResolve: false
                        }));
 
-        tsResult.dts.pipe(gulp.dest(config.tsOutputPath));
+        tsResult.dts.pipe(gulp.dest(config.distPath));
         return tsResult.js
 						.pipe(ngAnnotate())
                         .pipe(sourcemaps.write('.'))
-                        .pipe(gulp.dest(config.tsOutputPath));
+                        .pipe(gulp.dest(config.distPath));
 });
 
 /**
  * Remove all generated JavaScript files from TypeScript compilation.
  */
 gulp.task('clean-ts', function (cb) {
-  var typeScriptGenFiles = [config.tsOutputPath,         // path to generated JS files
-                            config.source +'**/*.js',    // path to all JS files auto gen'd by editor
-                            config.source +'**/*.js.map' // path to all sourcemap files auto gen'd by editor
+  var typeScriptGenFiles = [config.distPath,         // path to generated JS files
+                            config.source + '**/*.js',    // path to all JS files auto gen'd by editor
+                            config.source + '**/*.js.map' // path to all sourcemap files auto gen'd by editor
                            ];
 
   // delete the files
   del(typeScriptGenFiles, cb);
+});
+
+// app.less contains all the imports
+// use notify if you are using a mac
+gulp.task('less', function () {
+    return gulp.src([config.mainLessFile]) 
+        .pipe(less({compress: true}).on('error', gutil.log))
+        .pipe(autoprefixer('last 10 versions', 'ie 9'))
+        .pipe(minifycss({keepBreaks: false}))
+        .pipe(gulp.dest(config.distPath))
+        .pipe(notify('Less Compiled, Prefixed and Minified'));
+});
+
+gulp.task('html2js', function() {
+	return gulp.src(config.source + "**/*.html")
+    .pipe(minifyHtml({
+        empty: true,
+        spare: true,
+        quotes: true
+    }))
+    .pipe(ngHtml2Js({
+        moduleName: "MyAwesomePartials",
+        prefix: "/partials"
+    }))
+    .pipe(concat("partials.min.js"))
+    .pipe(uglify())
+    .pipe(gulp.dest(config.distPath));
 });
 
 gulp.task('watch', function() {
