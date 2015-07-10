@@ -68,6 +68,8 @@ gulp.task('compile-ts', function () {
         tsResult.dts.pipe(gulp.dest(config.distPath));
         return tsResult.js
 						.pipe(ngAnnotate())
+                        .pipe(concat(p.name + ".min.js"))
+                        .pipe(uglify())
                         .pipe(sourcemaps.write('.'))
                         .pipe(gulp.dest(config.distPath));
 });
@@ -98,6 +100,7 @@ gulp.task('compile-less', function () {
 
 gulp.task('html2js', function() {
 	return gulp.src(config.source + "**/*.html")
+    .pipe(sourcemaps.init())
     .pipe(minifyHtml({
         empty: true,
         spare: true,
@@ -107,8 +110,9 @@ gulp.task('html2js', function() {
         moduleName: p.name + "-tpl",
         prefix: "module/"
     }))
-    .pipe(concat("partials.min.js"))
     .pipe(uglify())
+    .pipe(concat(p.name + ".tpl.min.js"))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.distPath));
 });
 
@@ -137,12 +141,14 @@ gulp.task('ngdocs', [], function () {
 //        .pipe(gulp.dest('./docs'));
 //});
 
+gulp.task('scripts', ['compile-ts', 'html2js']);
+
 gulp.task('watch', function() {
-    gulp.watch([config.allTypeScript], ['ts-lint', 'compile-ts', 'gen-ts-refs', 'ngdocs']);
+    gulp.watch([config.allTypeScript], ['ts-lint', 'scripts', 'gen-ts-refs', 'ngdocs']);
     gulp.watch([config.AllLESS], ['compile-less']);
-    gulp.watch([config.AllHTML], ['html2js']);
+    gulp.watch([config.AllHTML], ['scripts']);
 });
 
-gulp.task('default', ['ts-lint', 'compile-ts', 'gen-ts-refs', 'watch']);
+gulp.task('default', ['ts-lint', 'scripts', 'gen-ts-refs', 'watch']);
 
 gulp.task('release', []);
