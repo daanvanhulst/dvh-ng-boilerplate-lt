@@ -1,26 +1,27 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 /**
- * @ngdoc controller
- * @name dvhulstcom.ModuleController:AppController
+ * @ngdoc overview
+ * @name Module
  */
-class ModuleController {
-    constructor(private $scope) {
-		var henk : string = "Daan";
-		console.log(henk);
-		console.log($scope);
+module Module {
+    /**
+     * @ngdoc controller
+     * @name Module.ModuleController:ModuleController
+     */
+    export class ModuleController {
+        constructor(private $scope) {
+            var henk : string = "Daan";
+            console.log(henk);
+            console.log($scope);
+        }
     }
 }
 
-/**
- * @ngdoc overview
- * @name dvhulstcom
- */
 angular.module("dvhModule", [
 ])
 
 .controller("ModuleController", ["$scope",
-($scope) =>
-    new ModuleController($scope)
+($scope) => new Module.ModuleController($scope)
 ])
 ;

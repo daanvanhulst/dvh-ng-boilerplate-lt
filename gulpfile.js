@@ -14,13 +14,15 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
 	ngAnnotate = require('gulp-ng-annotate'),
+    ngDocs = require('gulp-ng-ts-docs'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
     tslint = require('gulp-tslint'),
     livereload = require('gulp-livereload'),
 	gutil = require('gulp-util'),
     del = require('del'),
-	Config = require('./gulpfile.config');;
+    p = require('./package.json'),
+    Config = require('./gulpfile.config');
 
 var config = new Config();
 
@@ -85,13 +87,13 @@ gulp.task('clean-ts', function (cb) {
 
 // app.less contains all the imports
 // use notify if you are using a mac
-gulp.task('less', function () {
+gulp.task('compile-less', function () {
     return gulp.src([config.mainLessFile]) 
         .pipe(less({compress: true}).on('error', gutil.log))
         .pipe(autoprefixer('last 10 versions', 'ie 9'))
         .pipe(minifycss({keepBreaks: false}))
-        .pipe(gulp.dest(config.distPath))
-        .pipe(notify('Less Compiled, Prefixed and Minified'));
+        .pipe(gulp.dest(config.distPath));
+        //.pipe(notify('Less Compiled, Prefixed and Minified'))
 });
 
 gulp.task('html2js', function() {
@@ -102,16 +104,45 @@ gulp.task('html2js', function() {
         quotes: true
     }))
     .pipe(ngHtml2Js({
-        moduleName: "MyAwesomePartials",
-        prefix: "/partials"
+        moduleName: p.name + "-tpl",
+        prefix: "module/"
     }))
     .pipe(concat("partials.min.js"))
     .pipe(uglify())
     .pipe(gulp.dest(config.distPath));
 });
 
+gulp.task('ngdocs', [], function () {
+
+    return gulp.src('./src/**/*.ts')
+        .pipe(debug({title: "ngdocs"}))
+        .pipe(ngDocs.process())
+        .pipe(gulp.dest('./docs'));
+});
+
+//gulp.task('ngdocs', [], function () {
+//
+//    var options = {
+//        scripts: [config.allTypeScript],
+//        html5Mode: true,
+//        startPage: '/api',
+//        title: "My Awesome Docs",
+//        image: "path/to/my/image.png",
+//        imageLink: "http://my-domain.com",
+//        titleLink: "/api"
+//    };
+//
+//    return gulp.src('path/to/src/*.js')
+//        .pipe(ngDocs.process(options))
+//        .pipe(gulp.dest('./docs'));
+//});
+
 gulp.task('watch', function() {
-    gulp.watch([config.allTypeScript], ['ts-lint', 'compile-ts', 'gen-ts-refs']);
+    gulp.watch([config.allTypeScript], ['ts-lint', 'compile-ts', 'gen-ts-refs', 'ngdocs']);
+    gulp.watch([config.AllLESS], ['compile-less']);
+    gulp.watch([config.AllHTML], ['html2js']);
 });
 
 gulp.task('default', ['ts-lint', 'compile-ts', 'gen-ts-refs', 'watch']);
+
+gulp.task('release', []);

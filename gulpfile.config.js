@@ -10,7 +10,10 @@ var GulpConfig = (function () {
         this.libraryTypeScriptDefinitions = this.typings + 'tsd.d.ts';
         this.appTypeScriptReferences = this.typings + 'app.d.ts';
     
+		this.AllLESS = this.source + '**/*.less';
 		this.mainLessFile = this.source + 'module.less';
+
+        this.AllHTML = this.source + '**/*.html'
 	}
     return GulpConfig;
 })();
