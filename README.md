@@ -12,6 +12,12 @@ fully automated.
 Start by cloning the repository. The automatic installation will do the exact same things as the manual installation.
 Some steps are not included yet (renaming of stuff), so this still has to be done manually.
 
+I assume that you have Node.js installed. And also done:
+npm install -g bower
+npm install -g karma
+npm install -g gulp
+npm install -g tsd
+
 ### Automatic installation:
 
 Run install.bat from CMD (only windows atm)
