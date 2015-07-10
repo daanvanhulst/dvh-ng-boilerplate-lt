@@ -16,7 +16,7 @@ module SubModule {
     }
 }
 
-angular.module("dvhModule", [
+angular.module("subModule", [
 ])
 
 .controller("SubModuleController", ["$scope",

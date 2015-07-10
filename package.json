@@ -24,12 +24,14 @@
   },
   "homepage": "https://github.com/daanvanhulst/dvh-ng-boilerplate-lt",
   "devDependencies": {
+    "browser-sync": "^2.7.13",
     "del": "^1.2.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-concat": "^2.6.0",
     "gulp-debug": "^2.0.1",
     "gulp-inject": "^1.3.1",
+    "gulp-jasmine": "^2.0.1",
     "gulp-jshint": "^1.11.2",
     "gulp-less": "^3.0.3",
     "gulp-livereload": "^3.8.0",
@@ -44,6 +46,16 @@
     "gulp-tslint": "^3.1.0-beta",
     "gulp-typescript": "^2.7.8",
     "gulp-uglify": "^1.2.0",
-    "gulp-util": "^3.0.6"
+    "gulp-util": "^3.0.6",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.12.37",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-ie-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-phantomjs2-launcher": "^0.1.6",
+    "karma-typescript-preprocessor": "0.0.19",
+    "phantomjs": "^1.9.17"
   }
 }

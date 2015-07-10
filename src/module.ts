@@ -11,14 +11,12 @@ module Module {
      */
     export class ModuleController {
         constructor(private $scope) {
-            var henk : string = "Daan";
-            console.log(henk);
-            console.log($scope);
         }
     }
 }
 
-angular.module("dvhModule", [
+angular.module("module", [
+    "subModule"
 ])
 
 .controller("ModuleController", ["$scope",

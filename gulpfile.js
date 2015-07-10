@@ -19,12 +19,23 @@ var gulp = require('gulp'),
     notify = require('gulp-notify'),
     tslint = require('gulp-tslint'),
     livereload = require('gulp-livereload'),
+	karma = require('karma').server,
 	gutil = require('gulp-util'),
     del = require('del'),
     p = require('./package.json'),
     Config = require('./gulpfile.config');
 
 var config = new Config();
+
+gulp.task('clean', function () {
+  del(['dist/']);
+});
+
+gulp.task('karma-watch', function() {
+  karma.start({
+    configFile:  __dirname + '/karma.conf.js'
+  });
+});
 
 /**
  * Generates the app.d.ts references file dynamically from all application *.ts files.
@@ -124,31 +135,18 @@ gulp.task('ngdocs', [], function () {
         .pipe(gulp.dest('./docs'));
 });
 
-//gulp.task('ngdocs', [], function () {
-//
-//    var options = {
-//        scripts: [config.allTypeScript],
-//        html5Mode: true,
-//        startPage: '/api',
-//        title: "My Awesome Docs",
-//        image: "path/to/my/image.png",
-//        imageLink: "http://my-domain.com",
-//        titleLink: "/api"
-//    };
-//
-//    return gulp.src('path/to/src/*.js')
-//        .pipe(ngDocs.process(options))
-//        .pipe(gulp.dest('./docs'));
-//});
-
-gulp.task('scripts', ['compile-ts', 'html2js']);
-
 gulp.task('watch', function() {
-    gulp.watch([config.allTypeScript], ['ts-lint', 'scripts', 'gen-ts-refs', 'ngdocs']);
+    gulp.watch([config.allTypeScript], ['ts-lint', 'compile-ts', 'gen-ts-refs', 'ngdocs']);
     gulp.watch([config.AllLESS], ['compile-less']);
-    gulp.watch([config.AllHTML], ['scripts']);
+    gulp.watch([config.AllHTML], ['html2js']);
 });
 
-gulp.task('default', ['ts-lint', 'scripts', 'gen-ts-refs', 'watch']);
+gulp.task(
+	'build', 
+		['clean', 'compile-less', 'ts-lint', 'compile-ts', 'gen-ts-refs', 'html2js', 'ngdocs']
+);
 
-gulp.task('release', []);
+gulp.task(
+	'default', 
+		['build', 'watch', 'karma-watch']
+);
