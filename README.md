@@ -38,6 +38,8 @@ The build is made with Gulp and includes:
 Compilation and minification of TypeScript to JavaScript
 Compilation and minification of HTML to JS
 Compilation and minification of LESS to CSS
+Automatic API documentation generation with ngDocs
+Automatic .tsd reference file generatino with all TypeScript files
 Karma server with Jasmine for unit testing
 
 ### Build output
@@ -55,4 +57,5 @@ bower.json     //Used to install third party libraries (Angular, etc)
 tsd.json       //Used to install TypeScript defintions for third party libraries.
 
 ## Unit testing
-It has Karma with Jasmine for creating unit tests and uses LESS for creating styles.
+It has Karma with Jasmine for creating unit tests. I haven't figured out yet how to write unit tests in TypeScript.
+The preprocessor that I use does not seem to like this, so I am sticking with .js.spec files for now for unit tests.
