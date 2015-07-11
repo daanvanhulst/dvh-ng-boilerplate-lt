@@ -23,7 +23,7 @@
     "no-duplicate-variable": true,
     "no-empty": true,
     "no-eval": true,
-    "no-string-literal": true,
+    "no-string-literal": false,
     "no-trailing-whitespace": true,
     "no-unreachable": true,
     "one-line": [true,

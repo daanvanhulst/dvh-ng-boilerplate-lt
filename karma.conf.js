@@ -24,7 +24,7 @@ module.exports = function(config) {
     files: [
 		'bower_components/angular/angular.js',
 		'bower_components/angular-mocks/angular-mocks.js',
-		'dist/dvh-ng-boilerplate-lt.tpl.min.js',
+		'dist/*.tpl.min.js',
 		'src/**/*.ts',
 		'src/**/*.spec.js'
     ],

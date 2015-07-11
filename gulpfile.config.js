@@ -11,7 +11,7 @@ var GulpConfig = (function () {
         this.appTypeScriptReferences = this.typings + 'app.d.ts';
     
 		this.AllLESS = this.source + '**/*.less';
-		this.mainLessFile = this.source + 'module.less';
+		this.mainLessFile = this.source + 'dvhClickToEdit.less';
 
         this.AllHTML = this.source + '**/*.html'
 	}

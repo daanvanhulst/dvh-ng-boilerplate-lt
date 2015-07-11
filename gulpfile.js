@@ -119,7 +119,7 @@ gulp.task('html2js', function() {
     }))
     .pipe(ngHtml2Js({
         moduleName: p.name + "-tpl",
-        prefix: "module/"
+        prefix: p.name + "/"
     }))
     .pipe(uglify())
     .pipe(concat(p.name + ".tpl.min.js"))
